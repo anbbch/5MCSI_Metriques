@@ -23,6 +23,10 @@ def meteo():
     from datetime import datetime
     dt_value = datetime.fromtimestamp(dt_value).strftime('%d/%m/%Y %H:%M')
 
+@app.route("/rapport/")
+def mongraphique():
+    return render_template("graphique.html")
+
 @app.route('/')
 def hello_world():
     return render_template('hello.html')
