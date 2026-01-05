@@ -28,7 +28,6 @@ def commits_data():
     raw_content = response.read()
     json_content = json.loads(raw_content.decode('utf-8'))
 
-    # compteur de commits par minute (0 à 59)
     compteur = {m: 0 for m in range(60)}
 
     for element in json_content:
@@ -38,16 +37,15 @@ def commits_data():
             minute = date_object.minute
             compteur[minute] += 1
 
-    # format final pour Google Charts
     results = []
     for minute in range(60):
         results.append({'minute': minute, 'commits': compteur[minute]})
 
     return jsonify(results=results)
 
-@app.route('/commits/')
+@app.route("/commits/")
 def commits():
-    return render_template('commits.html')
+    return render_template("commits.html")
 
 
 @app.route("/rapport/")
