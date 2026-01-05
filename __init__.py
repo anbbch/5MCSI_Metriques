@@ -22,6 +22,34 @@ def meteo():
         results.append({'Jour': dt_value, 'temp': temp_day_value})
     return jsonify(results=results)
 
+@app.route('/commits-data/')
+def commits_data():
+    response = urlopen('https://api.github.com/repos/OpenRSI/5MCSI_Metriques/commits')
+    raw_content = response.read()
+    json_content = json.loads(raw_content.decode('utf-8'))
+
+    # compteur de commits par minute (0 à 59)
+    compteur = {m: 0 for m in range(60)}
+
+    for element in json_content:
+        date_string = element.get('commit', {}).get('author', {}).get('date')
+        if date_string:
+            date_object = datetime.strptime(date_string, '%Y-%m-%dT%H:%M:%SZ')
+            minute = date_object.minute
+            compteur[minute] += 1
+
+    # format final pour Google Charts
+    results = []
+    for minute in range(60):
+        results.append({'minute': minute, 'commits': compteur[minute]})
+
+    return jsonify(results=results)
+
+@app.route('/commits/')
+def commits():
+    return render_template('commits.html')
+
+
 @app.route("/rapport/")
 def mongraphique():
     return render_template("graphique.html")
