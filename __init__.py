@@ -20,8 +20,7 @@ def meteo():
         dt_value = list_element.get('dt')
         temp_day_value = list_element.get('main', {}).get('temp') - 273.15 # Conversion de Kelvin en °c 
         results.append({'Jour': dt_value, 'temp': temp_day_value})
-    from datetime import datetime
-    dt_value = datetime.fromtimestamp(dt_value).strftime('%d/%m/%Y %H:%M')
+    return jsonify(results=results)
 
 @app.route("/rapport/")
 def mongraphique():
